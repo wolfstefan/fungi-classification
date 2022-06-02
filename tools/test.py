@@ -180,6 +180,8 @@ def main():
         warnings.warn('Class names are not saved in the checkpoint\'s '
                       'meta data, use imagenet by default.')
         CLASSES = ImageNet.CLASSES
+    if CLASSES is None:
+        CLASSES = dataset.CLASSES
 
     if not distributed:
         if args.device == 'cpu':

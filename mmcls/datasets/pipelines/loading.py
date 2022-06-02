@@ -3,6 +3,10 @@ import os.path as osp
 
 import mmcv
 import numpy as np
+import cv2
+
+from mmcv.image.io import _jpegflag, imread_flags
+from mmcv.utils import is_str
 
 from ..builder import PIPELINES
 
@@ -47,6 +51,11 @@ class LoadImageFromFile(object):
 
         img_bytes = self.file_client.get(filename)
         img = mmcv.imfrombytes(img_bytes, flag=self.color_type)
+        if img is None:
+            flag = self.color_type
+            flag = imread_flags[flag] if is_str(flag) else flag
+            img = cv2.imread(filename, flag)
+        assert img is not None, filename
         if self.to_float32:
             img = img.astype(np.float32)
 
